@@ -1,6 +1,6 @@
+import random
 import numpy as np
 
-# dataset, label = read_txt("./HW1/Flood_dataset.txt")
 def read_txt(file):
     f=open(file, "r")
     if(file[-3:] == 'txt'):
@@ -36,8 +36,43 @@ def read_txt(file):
             
     return dataset,label
 
-dataset, label = read_txt("./HW1/cross.pat")
+def norm(data_in):
+    data = data_in.copy()
+    datanorm = (data - data.min())/(data.max() - data.min())
 
-print(dataset[0])
-print()
-print(label[0])
+    return datanorm
+
+def data_cross(data, label, epoch):
+    data_train = []
+    data_test = []
+    data_temp = []
+
+    for i in range(len(data)):
+        if(i%10 != epoch%10):
+            data_temp = []
+            data_temp.append(data[i])
+            data_temp.append(label[i])
+            data_train.append(data_temp)
+        else:
+            data_temp = []
+            data_temp.append(data[i])
+            data_temp.append(label[i])
+            data_test.append(data_temp)
+
+    random.shuffle(data_train)
+    random.shuffle(data_test)
+    
+    data_trainn = []
+    label_train = []
+    data_testt = []
+    label_test = []
+
+    for i in range(len(data_train)):
+        data_trainn.append(data_train[i][0])
+        label_train.append(data_train[i][1])
+
+    for i in range(len(data_test)):
+        data_testt.append(data_test[i][0])
+        label_test.append(data_test[i][1])
+
+    return data_trainn, label_train, data_testt, label_test
